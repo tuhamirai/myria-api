@@ -15,8 +15,8 @@ sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 async function sendMail(emailParams) {
   try {
     await sendGridMail.send({
-      to: emailParams.toEmail,
-      from: process.env.TO_EMAIL || "hello@myria.com",
+      from: emailParams.fromEmail,
+      to: process.env.TO_EMAIL || "hello@myria.com",
       subject: emailParams.subject,
       text: emailParams.message,
     });
