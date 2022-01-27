@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
 const port = 3000 || process.env.PORT;
@@ -7,6 +7,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const sendGridMail = require("@sendgrid/mail");
+const client = require("@sendgrid/client");
+
+client.setApiKey(process.env.SENDGRID_API_KEY);
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendMail(emailParams) {
@@ -15,16 +18,35 @@ async function sendMail(emailParams) {
       to: emailParams.toEmail,
       from: process.env.TO_EMAIL || "hello@myria.com",
       subject: emailParams.subject,
-      text: emailParams.message
+      text: emailParams.message,
     });
     return { message: `Email has been sent successfully` };
   } catch (error) {
-    const message = `Error sending email`;
-    return { message };
+    return { message: "Error sending email" };
   }
 }
 
-app.post('/contact-us', async (req, res, next) => {
+async function subcription(params) {
+  const request = {
+    method: "PUT",
+    url: "/v3/marketing/contacts",
+    body: {
+      "list_ids": ["896616eb-fed8-477e-ad84-73e82a722c65"], 
+      "contacts": [{
+          "email": params.email 
+      }]
+    }
+  };
+
+  try {
+    await client.request(request);
+    return { message: "Subscription has been submitted successfully" };
+  } catch (error) {
+    return { message: "subscription error" };
+  }
+}
+
+app.post("/contact-us", async (req, res, next) => {
   try {
     res.json(await sendMail(req.body));
   } catch (err) {
@@ -32,13 +54,21 @@ app.post('/contact-us', async (req, res, next) => {
   }
 });
 
-app.use((err, _, res, _) => {
+app.put("/subcription", async (req, res, next) => {
+  try {
+    res.json(await subcription(req.body));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.use((err, _, res, __) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message, err.stack);
-  res.status(statusCode).json({'message': err.message});
+  res.status(statusCode).json({ message: err.message });
   return;
 });
 
 app.listen(port, () => {
-  console.log(`Example API listening at http://localhost:${port}`)
+  console.log(`Example API listening at http://localhost:${port}`);
 });
