@@ -1,5 +1,5 @@
 {
-  "name": "api stuffs for website",
+  "name": "api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@sendgrid/client": "^7.6.0",
     "@sendgrid/mail": "^7.6.0",
+    "cors": "^2.8.5",
     "dotenv": "^14.3.2",
     "express": "^4.17.2"
   }
