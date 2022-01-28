@@ -27,7 +27,7 @@ async function sendMail(emailParams) {
   }
 }
 
-async function subcription(params) {
+async function subscription(params) {
   const request = {
     method: "PUT",
     url: "/v3/marketing/contacts",
@@ -41,7 +41,7 @@ async function subcription(params) {
 
   try {
     await client.request(request);
-    return { message: "Subscription has been submitted successfully" };
+    return { message: "subscription has been submitted successfully" };
   } catch (error) {
     return { message: "subscription error" };
   }
@@ -55,9 +55,9 @@ app.post("/contact-us", async (req, res, next) => {
   }
 });
 
-app.put("/subcription", async (req, res, next) => {
+app.put("/subscription", async (req, res, next) => {
   try {
-    res.json(await subcription(req.body));
+    res.json(await subscription(req.body));
   } catch (err) {
     next(err);
   }
