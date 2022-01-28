@@ -63,6 +63,10 @@ app.put("/subscription", async (req, res, next) => {
   }
 });
 
+app.put("/healthcheck", async (_, res, next) => {
+  res.sendStatus(200);
+});
+
 app.use((err, _, res, __) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message, err.stack);
