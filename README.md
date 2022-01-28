@@ -1,2 +1,2 @@
-# email-service
-Email service for website
+# apis for myria
+Api stufss for myria website
